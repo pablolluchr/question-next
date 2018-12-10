@@ -6,11 +6,10 @@ def print_scores(question_answers,scores):
     answer2=question_answers[2]
     answer3=question_answers[3]
 
-    print(question)
-
     sum_scores=scores[0]+scores[1]+scores[2]
 
     if(sum_scores==0):
+        print(question)
         print("Those human bitches are smarter than me...")
         return
 
@@ -31,5 +30,4 @@ def print_scores(question_answers,scores):
     for i in range(0,round(percentage_scores[2]/2)):
         bars += "|"
     print(answer3 + bars + " "  + str(percentage_scores[2])+ "%")
-    print("")
-    print("")
+    

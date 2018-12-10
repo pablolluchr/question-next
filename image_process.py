@@ -4,6 +4,9 @@ import pytesseract
 def get_question_answers(image):
     #open file and set init variables
     im = Image.open(image).convert('L')
+
+    #apply binary threshold
+    im = im.point(lambda x: 0 if x<128 else 255, '1')
     image_size = im.size
     width = image_size[0]
     height = image_size[1]
@@ -13,21 +16,24 @@ def get_question_answers(image):
     top=3*height/4.7
     bottom=3*height/3.9
     question = im.crop((1, top, width, bottom))
-    question.save('test.png')
+    question.save('question.png')
     # ANSWER 1
-    top=3*height/3.8
-    bottom=3*height/3.6
-    answer1 = im.crop((width/9.5, top, 8.5*width/10, bottom))
+    top=3*height/3.76
+    bottom=3*height/3.56
+    answer1 = im.crop((width/8.2, top, 8.5*width/10, bottom))
+    answer1.save('answer1.png')
 
     # ANSWER 2
     top=3*height/3.45
     bottom=3*height/3.3
-    answer2 = im.crop((width/9.5, top, 8.5*width/10, bottom))
+    answer2 = im.crop((width/8.2, top, 8.5*width/10, bottom))
+    answer2.save('answer2.png')
 
     # ANSWER 3
     top=3*height/3.15
     bottom=3*height/3.03
-    answer3 = im.crop((width/9.5, top, 8.5*width/10, bottom))
+    answer3 = im.crop((width/8.2, top, 8.5*width/10, bottom))
+    answer3.save('answer3.png')
 
 
     ################################################################

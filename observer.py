@@ -4,8 +4,8 @@ from watchdog.events import FileSystemEventHandler
 from main import find_answer, find_answer_no_fork
 
 class Watcher:
-    # DIRECTORY_TO_WATCH = "../../../Downloads"
-    DIRECTORY_TO_WATCH = "./"
+    DIRECTORY_TO_WATCH = "../../../Downloads"
+    # DIRECTORY_TO_WATCH = "./"
 
 
     def __init__(self):
@@ -16,8 +16,8 @@ class Watcher:
         self.observer.schedule(event_handler, self.DIRECTORY_TO_WATCH, recursive=True)
         self.observer.start()
         try:
-            while True:
-                time.sleep(1)
+            while True: 
+                time.sleep(0.1)
         except:
             self.observer.stop()
             print("Error")
@@ -34,8 +34,19 @@ class Handler(FileSystemEventHandler):
 
         elif event.event_type == 'created':
             # Take any action here when a file is first created.
-            print("Received created event - %s." % event.src_path)
-            find_answer_no_fork(event.src_path)
+            print("Thinking...")
+            #check if download item found
+
+            start_time = time.time()
+
+            if event.src_path.find(".crdownload")!= -1:
+                image_path = event.src_path[:-11]
+                time.sleep(0.1)
+                find_answer_no_fork(image_path)
+            elif event.src_path.find(".jpg")!= -1 or event.src_path.find(".png")!= -1:
+                find_answer_no_fork( event.src_path)
+
+            print("--- Total time:  %s seconds ---" % (time.time() - start_time))
 
         elif event.event_type == 'modified':
             # Taken any action here when a file is modified.

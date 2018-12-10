@@ -50,7 +50,10 @@ def find_answer_no_fork(image):
     ################################################################
     #crop image to create question, answer1, answer2 and answer3
     ################################################################
+
+    start_time = time.time()
     question_answers = get_question_answers(image)
+    print("--- OCR time:  %s seconds ---" % (time.time() - start_time))
 
     #GLOBAL VARIABLES
     question = question_answers[0]
@@ -58,6 +61,9 @@ def find_answer_no_fork(image):
     answer2 = question_answers[2]
     answer3 = question_answers[3]
 
+    start_time = time.time()
     parent_occurrencies = google_query(question_answers,0, 3)
+    print("--- querrying time:  %s seconds ---" % (time.time() - start_time))
+
     print_scores(question_answers,parent_occurrencies)
 
