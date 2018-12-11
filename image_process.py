@@ -1,6 +1,12 @@
 from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
+from multiprocessing import Pool, TimeoutError
+#TODO: SPLIT INTO PROCESSES TO PERFORM OCD IN EVERY IMAGE
 #returns an array: [question, answer1, answer2, answer3] given an input image
+
+
+def process_image(image):
+    return pytesseract.image_to_string(image,lang="spa").lower()
 def get_question_answers(image):
     #open file and set init variables
     im = Image.open(image).convert('L')
@@ -44,12 +50,11 @@ def get_question_answers(image):
     # threshold woudl be enough
 
     # Get plain text from question
-    #GLOBAL VARIABLES
-    question = pytesseract.image_to_string(question,lang="spa")
-    answer1 = pytesseract.image_to_string(answer1,lang="spa").lower()
-    answer2 = pytesseract.image_to_string(answer2,lang="spa").lower()
-    answer3 = pytesseract.image_to_string(answer3,lang="spa").lower()
+    images= [question,answer1,answer2,answer3]
+    pool = Pool(processes=12)              # start 4 worker processes
 
+    answer_questions = pool.map(process_image, images)
+    answer_questions[0]=answer_questions[0].replace("\n", " ")
     #process questions, all lowercase for example
-    question_parsed = question.replace("\n", " ")
-    return [question_parsed,answer1,answer2,answer3]
+
+    return answer_questions

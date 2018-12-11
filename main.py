@@ -1,69 +1,93 @@
-
-
-
-import os, sys, time
+import time, os
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from multiprocessing import Pool, TimeoutError
 from image_process import get_question_answers
-from google_search import google_query
+from googlesearch import search 
+from pygoogling.googling import GoogleSearch
 from printer import print_scores
-
-def find_answer(image):
-    ################################################################
-    #crop image to create question, answer1, answer2 and answer3
-    ################################################################
-    question_answers = get_question_answers(image)
-
-    #GLOBAL VARIABLES
-    question = question_answers[0]
-    answer1 = question_answers[1]
-    answer2 = question_answers[2]
-    answer3 = question_answers[3]
-
-    #DO REVERSED IF ITS NEGATIVE
-
-    #CREATING TWO PROCESS TO QUERRY SIMULTANEOUSLY
-    # file descriptors r, w for reading and writing 
-    r, w = os.pipe() 
-    #Creating child process using fork 
-    processid = os.fork() 
-
-    if processid: #parent process
-        os.close(w) 
-        r = os.fdopen(r) 
-        parent_occurrencies = google_query(question_answers,0, 3)
-        child_string = r.read() 
-        child_occurrencies_string = child_string.split(',')
-
-        child_occurrencies = list(map(int, child_occurrencies_string))
-        total_scores = [x + y for x, y in zip(child_occurrencies, parent_occurrencies)]
-
-        print_scores(question_answers, total_scores)
+import urllib
+from bs4 import BeautifulSoup
 
 
-    else: #child process
-        os.close(r) 
-        w = os.fdopen(w, 'w') 
-        ocurrences = google_query(question_answers,3,3)
-        w.write(str(ocurrences[0])+","+str(ocurrences[1])+","+str(ocurrences[2])) 
-        w.close() 
+#gets html from url and parses it to find answer occurrencies
+def getFrequencies(url_and_answers):
+    url = url_and_answers[0]
+    answer1 = url_and_answers[1]
+    answer2 = url_and_answers[2]
+    answer3 = url_and_answers[3]
+    print(url)
+    try:
+        with urllib.request.urlopen(url) as response:
+            html = response.read()
+    except urllib.error.HTTPError:
+        # print("http error")
+        return [0,0,0]
+    except urllib.error.URLError:
+        # print("url error")
+        return [0,0,0]
 
-def find_answer_no_fork(image):
-    ################################################################
-    #crop image to create question, answer1, answer2 and answer3
-    ################################################################
 
+    soup = BeautifulSoup(html,features="html.parser")
+
+    # kill all script and style elements
+    for script in soup(["script", "style"]):
+        script.extract()    # rip it out
+    # get text
+    
+    #process text (all lower case for example)
+    text = soup.get_text().lower()
+
+    #number of occurrences of each string
+    # frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
+    frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
+
+    # print(frequencies)
+    return frequencies
+
+#peforms ocr on the image at path, searches the answer in google and
+    #uses getFrequencies to find the most likely answer
+def find_answer(path):
+
+    number_of_workers = 3
+    number_of_urls = 9
+
+
+    #Perform ocr
     start_time = time.time()
-    question_answers = get_question_answers(image)
+    question_answers = get_question_answers(path)
     print("--- OCR time:  %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
 
-    #GLOBAL VARIABLES
     question = question_answers[0]
     answer1 = question_answers[1]
     answer2 = question_answers[2]
     answer3 = question_answers[3]
 
     start_time = time.time()
-    parent_occurrencies = google_query(question_answers,0, 3)
+
+    #performs google search
+    google_search = GoogleSearch(question)
+    google_search.start_search(max_page=1) # MAYBE 0 IS THE FIRST PAGE?
+    urls = google_search.search_result 
+
+    #looks for occurrences in html of urls
+    first_urls= urls[:number_of_urls]
+    urls_and_answers = []
+    for url in first_urls:
+        urls_and_answers.append([url,answer1,answer2,answer3])
+
+    #creates processes
+    pool = Pool(processes=number_of_workers)
+    all_frequencies = pool.map(getFrequencies, urls_and_answers)
+
+    #calculate additive frequencies
+    sumed_frequencies = [0,0,0]
+    for freq in all_frequencies:
+        sumed_frequencies[0]+=freq[0]
+        sumed_frequencies[1]+=freq[1]
+        sumed_frequencies[2]+=freq[2]
+
+    #print scores
+    print_scores([question,answer1,answer2,answer3],sumed_frequencies)
     print("--- querrying time:  %s seconds ---" % (time.time() - start_time))
-
-    print_scores(question_answers,parent_occurrencies)
-

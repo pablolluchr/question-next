@@ -30,4 +30,23 @@ def print_scores(question_answers,scores):
     for i in range(0,round(percentage_scores[2]/2)):
         bars += "|"
     print(answer3 + bars + " "  + str(percentage_scores[2])+ "%")
-    
+
+    #Print the winner nice and clear
+
+    winner = ""
+    if scores[0] > scores[1]:
+        if scores[0]> scores[2]:
+            winner = answer1
+        else:
+            winner = answer3
+    else:
+        if scores[1]> scores[2]:
+            winner = answer2
+        else:
+            winner = answer3
+
+    print("")
+    print("")
+    print("                    " + winner)
+    print("")
+    print("")
