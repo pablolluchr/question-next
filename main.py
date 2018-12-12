@@ -63,51 +63,76 @@ def getFrequencies(url_and_answers):
         
         #process text (all lower case for example)
         text = soup.get_text().lower()
-
-        #number of occurrences of each string
-        # frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
-        frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
-        #words that appear
-        frequencies = list(map(lambda x: x*5, frequencies))
+        
         #test individual words
         words_answer1=answer1.split(' ')
         words_answer2=answer1.split(' ')
         words_answer3=answer1.split(' ')
 
+        valid_words_in_answer1 = 0
+        valid_words_in_answer2 = 0
+        valid_words_in_answer3 = 0
+
+        frequencies = [0,0,0]
+
         for word in words_answer1:
             if(len(word)>4):
-                frequencies[0]+=text.count(word)
+                frequencies[0]+= text.count(word) 
+                valid_words_in_answer1+=1
         for word in words_answer2:
             if(len(word)>4):
                 frequencies[1]+=text.count(word)
+                valid_words_in_answer2+=1
         for word in words_answer3:
             if(len(word)>4):
                 frequencies[2]+=text.count(word)
+                valid_words_in_answer3+=1
+
+        #normalize
+        
+        frequencies[0]=frequencies[0] / (valid_words_in_answer1+1)
+        frequencies[1]=frequencies[1] / (valid_words_in_answer2+1)
+        frequencies[2]=frequencies[2] / (valid_words_in_answer3+1)
 
 
+        #test full answers
+        full_answer_frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
+        #words that appear
+        full_answer_frequencies = list(map(lambda x: x*5, full_answer_frequencies))
+
+        frequencies = [frequencies[0] + full_answer_frequencies[0],frequencies[1] + full_answer_frequencies[1],frequencies[2] + full_answer_frequencies[2]]
 
         # print(frequencies)
         print(url)
         return frequencies
     except TimeoutError:
         return [0,0,0]
+
 #peforms ocr on the image at path, searches the answer in google and
     #uses getFrequencies to find the most likely answer
 def find_answer(path):
-
     number_of_workers = 10
     number_of_urls = 10
+    debug = True
 
-    #Perform ocr
-    start_time = time.time()
-    question_answers = get_question_answers(path)
-    print("--- OCR time:  %s seconds ---" % (time.time() - start_time))
-    start_time = time.time()
+    #for debugging purposes, find_answer could be passed an array (question_answers)
+    if not isinstance(path, list):
+        #Perform ocr
+        start_time = time.time()
+        question_answers = get_question_answers(path)
+        print("--- OCR time:  %s seconds ---" % (time.time() - start_time))
+    else:
+        question_answers=path
 
     question = question_answers[0]
     answer1 = question_answers[1]
     answer2 = question_answers[2]
     answer3 = question_answers[3]
+
+    if debug:
+        text_file = open("trainer.py", "a")
+        text_file.write("find_answer(['" + question + "','" + answer1 + "','" + answer2 + "','" + answer3 + "'])\n")
+        text_file.close()
 
     start_time = time.time()
 

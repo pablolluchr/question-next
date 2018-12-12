@@ -19,7 +19,7 @@ def get_question_answers(image):
 
     # img.crop( ( left, top, right, bottom ) )  # size: 45, 45
     # QUESTION
-    top=3*height/4.7
+    top=3*height/4.6
     bottom=3*height/3.9
     question = im.crop((1, top, width, bottom))
     question.save('question.png')
