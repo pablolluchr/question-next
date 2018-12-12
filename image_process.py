@@ -51,9 +51,9 @@ def get_question_answers(image):
 
     # Get plain text from question
     images= [question,answer1,answer2,answer3]
-    pool = Pool(processes=12)              # start 4 worker processes
-
+    pool = Pool(processes=4)              
     answer_questions = pool.map(process_image, images)
+    pool.terminate()
     answer_questions[0]=answer_questions[0].replace("\n", " ")
     #process questions, all lowercase for example
 

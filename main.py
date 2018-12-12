@@ -35,7 +35,7 @@ def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
     return decorator
 
 #gets html from url and parses it to find answer occurrencies
-@timeout(1)
+@timeout(3)
 def getFrequencies(url_and_answers):
     try:
         # TODO: add timeout to function so that if a certain page takes too much it ignores it
@@ -67,6 +67,24 @@ def getFrequencies(url_and_answers):
         #number of occurrences of each string
         # frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
         frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
+        #words that appear
+        frequencies = list(map(lambda x: x*5, frequencies))
+        #test individual words
+        words_answer1=answer1.split(' ')
+        words_answer2=answer1.split(' ')
+        words_answer3=answer1.split(' ')
+
+        for word in words_answer1:
+            if(len(word)>4):
+                frequencies[0]+=text.count(word)
+        for word in words_answer2:
+            if(len(word)>4):
+                frequencies[1]+=text.count(word)
+        for word in words_answer3:
+            if(len(word)>4):
+                frequencies[2]+=text.count(word)
+
+
 
         # print(frequencies)
         print(url)
@@ -107,6 +125,7 @@ def find_answer(path):
     #creates processes
     pool = Pool(processes=number_of_workers)
     all_frequencies = pool.map(getFrequencies, urls_and_answers)
+    pool.terminate()
 
     #calculate additive frequencies
     sumed_frequencies = [0,0,0]
