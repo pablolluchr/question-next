@@ -13,6 +13,10 @@ import errno
 import os
 import signal
 
+#TODO: detect determinants and remove them instead than removing words with len <4 (both for questions and answers)
+#TODO: containerize code that procesesss the question / answers ^^ in a function
+
+
 class TimeoutError(Exception):
     pass
 
@@ -66,15 +70,14 @@ def getFrequencies(url_and_answers):
         
         #test individual words
         words_answer1=answer1.split(' ')
-        words_answer2=answer1.split(' ')
-        words_answer3=answer1.split(' ')
+        words_answer2=answer2.split(' ')
+        words_answer3=answer3.split(' ')
 
         valid_words_in_answer1 = 0
         valid_words_in_answer2 = 0
         valid_words_in_answer3 = 0
 
         frequencies = [0,0,0]
-
         for word in words_answer1:
             if(len(word)>4):
                 frequencies[0]+= text.count(word) 
@@ -89,11 +92,11 @@ def getFrequencies(url_and_answers):
                 valid_words_in_answer3+=1
 
         #normalize
-        
+        # print(frequencies)
         frequencies[0]=frequencies[0] / (valid_words_in_answer1+1)
         frequencies[1]=frequencies[1] / (valid_words_in_answer2+1)
         frequencies[2]=frequencies[2] / (valid_words_in_answer3+1)
-
+        
 
         #test full answers
         full_answer_frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
@@ -113,7 +116,7 @@ def getFrequencies(url_and_answers):
 def find_answer(path):
     number_of_workers = 10
     number_of_urls = 10
-    debug = True
+    debug = False
 
     #for debugging purposes, find_answer could be passed an array (question_answers)
     if not isinstance(path, list):
@@ -133,6 +136,20 @@ def find_answer(path):
         text_file = open("trainer.py", "a")
         text_file.write("find_answer(['" + question + "','" + answer1 + "','" + answer2 + "','" + answer3 + "'])\n")
         text_file.close()
+
+
+    #removes clutter from question
+    question_words = question.split(' ')
+    new_question = ""
+    for word in question_words:
+        #remove ugly characters
+        word = word.replace("\"", "")
+        word = word.replace("'", "")
+        word = word.replace("?", "")
+        if len(word)>4:
+            new_question = new_question + " " + word
+    question=new_question
+
 
     start_time = time.time()
 

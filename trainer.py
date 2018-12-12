@@ -1,6 +1,6 @@
 from main import find_answer
 
-test_set = 2
+test_set = 3
 
 if test_set == 1:
     find_answer(['Si algo te importa un pimiento es que...','te toca las narices','es pan comido','no te importa nada'])
@@ -30,5 +30,24 @@ elif test_set == 2:
     find_answer(['¿Qué quiere decir el nombre del sistema de navegación por satélite desarrollado por China?','osa mayor','brújula','galaxia'])
     find_answer(['¿Cuál fue la primera película estadounidense en mostrar un inodoro con agua circulando?','leaving las vegas','psicosis','la semilla del diablo'])
     find_answer(['¿Qué banda de rock ha llevado a cabo la gira con mayor recaudación de la historia?','the rolling stones','u2','coldplay'])
-
+elif test_set == 3:
+    # find_answer(['¿a qué nos estamos refiriendo al utilizar el término "hayuco"?','un pequeño barco','un fruto','un tambor de madera de haya'])
+    find_answer(['estamos refiriendo utilizar término hayuco','un pequeño barco','un fruto','un tambor de madera de haya'])
+    find_answer(['¿queé campesina llevó al ejército francés a conseguir  varias victorias en el campo de batalla?','coco chanel','penélope glamour','juana de arco'])
+    find_answer(['¿en qué ciudad nació el pintor pablo picasso?','málaga','sevilla','barcelona'])
+    find_answer(['de los tres siguientes, uno no es un mago azul en la saga del señor de los anillos:','alatar','pallando','radagast'])
+    find_answer(['¿cual de estos tenistas consiguió ganar los cuatro torneos de grand slam en un mismo año?','bjorn borg','roger federer','rod laver'])
+    
+elif test_st == 4:
+    find_answer(['¿queé campesina llevó al ejército francés a conseguir  varias victorias en el campo de batalla?','coco chanel','penélope glamour','juana de arco'])
+    find_answer(['¿en qué ciudad nació el pintor pablo picasso?','málaga','sevilla','barcelona'])
+    find_answer(['mide la cantidad de lluvia que cae en un lugar y en un espacio de tiempo determinados?','hidrógrafo','pluviómetro','termómetro'])
+    find_answer(['¿cuál es el nombre actual del país que en su día se llamó persia?','irak','irán','afganistán'])
+    find_answer(['¿cuál es el significado en español del acrónimo var?','árbitro asistente de vídeo','vídeo arbitraje por repetición','rectificación de arbitraje por vídeo'])
+    find_answer(['¿a qué nos estamos refiriendo al utilizar el término "hayuco"?','un pequeño barco','un fruto','un tambor de madera de haya'])
+    find_answer(['¿a qué grupo de la tabla periódica pertenece el francio?','alcalinos','alcalinotérreos','halógenos'])
+    find_answer(['¿quién interpretó el personaje de george costanza en la serie de televisión seinfeld?','jason alexander','john malkovich','stuart templeton'])
+    find_answer(['de los tres siguientes, uno no es un mago azul en la saga del señor de los anillos:','alatar','pallando','radagast'])
+    find_answer(['¿a cuál de estas novelas pertenece el personaje de la maga?','luces de bohemia','alicia en el país de las maravillas','rayuela'])
+    find_answer(['¿cual de estos tenistas consiguió ganar los cuatro torneos de grand slam en un mismo año?','bjorn borg','roger federer','rod laver'])
 
