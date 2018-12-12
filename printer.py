@@ -5,12 +5,23 @@ def print_scores(question_answers,scores):
     answer1=question_answers[1]
     answer2=question_answers[2]
     answer3=question_answers[3]
+    longest_answer = max(len(answer1), len(answer2), len(answer3))
 
-    sum_scores=scores[0]+scores[1]+scores[2]
+    #left pad answers
+    for i in range(0,longest_answer-len(answer1)):
+        answer1= " " + answer1
+    for i in range(0,longest_answer-len(answer2)):
+        answer2= " " + answer2
+    for i in range(0,longest_answer-len(answer3)):
+        answer3= " " + answer3
+    sum_scores =scores[0]+scores[1]+scores[2]
 
     if(sum_scores==0):
         print(question)
+        print("")
         print("Those human bitches are smarter than me...")
+        print("")
+
         return
 
     percentage_scores = [round(100*scores[0]/sum_scores), round(100*scores[1]/sum_scores), round(100*scores[2]/sum_scores)]
@@ -21,15 +32,15 @@ def print_scores(question_answers,scores):
     bars = ""
     for i in range(0,round(percentage_scores[0]/2)):
         bars += "|"
-    print(answer1 + bars + " " + str(percentage_scores[0])+ "%")
+    print(answer1 + " " + bars + " " + str(percentage_scores[0])+ "%")
     bars = ""
     for i in range(0,round(percentage_scores[1]/2)):
         bars += "|"
-    print(answer2 +bars + " "  + str(percentage_scores[1])+ "%")
+    print(answer2 + " " + bars + " "  + str(percentage_scores[1])+ "%")
     bars = ""
     for i in range(0,round(percentage_scores[2]/2)):
         bars += "|"
-    print(answer3 + bars + " "  + str(percentage_scores[2])+ "%")
+    print(answer3 + " " + bars + " "  + str(percentage_scores[2])+ "%")
 
     #Print the winner nice and clear
 

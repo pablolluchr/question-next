@@ -20,25 +20,15 @@ elif test_set == 2:
     find_answer(['¿Qué nombre recibe la cría de un conejo?','cervato','lechon','gazapo'])
     find_answer(['¿Cuál de estas novelas está protagonizada por el personaje de Lisbeth Salander?','los hombres que no amaban a las mujeres','la divina comedia','don juan tenorio'])
     find_answer(['¿Qué se propuso desarrollar el Proyecto Manhattan en 1941?','un avion supersonico','un cohete lunar','una bomba atomica'])
-    find_answer(['¿Cómo se llama el sistema de medidas británico?','a1','a2','a3'])
     find_answer(['¿Cómo se llama el sistema de medidas británico?','sistema metrico decimal','sistema duodecimal','sistema imperial'])
     find_answer(['¿A qué nos referimos cuando hacemos alusión a un “paletoque”?','un instrumento de escultor','una prenda de vestir','una herramienta de albañil'])
     find_answer(['¿Con cuántos países comparte frontera terrestre España?','3','4','5'])
     find_answer(['¿Cuál de estos pintores franceses es el autor de la obra “Juramento del juego de la pelota”?','Eugène delacroix','jacques-louis david','théodore géricault'])
     find_answer(['¿Cuál de estas opciones NO es una modalidad deportiva de invierno?','telemark','mushing','jailstyle'])
-    find_answer(['question','telemark','mushing','jailstyle'])
     find_answer(['¿Qué quiere decir el nombre del sistema de navegación por satélite desarrollado por China?','osa mayor','brújula','galaxia'])
     find_answer(['¿Cuál fue la primera película estadounidense en mostrar un inodoro con agua circulando?','leaving las vegas','psicosis','la semilla del diablo'])
     find_answer(['¿Qué banda de rock ha llevado a cabo la gira con mayor recaudación de la historia?','the rolling stones','u2','coldplay'])
 elif test_set == 3:
-    # find_answer(['¿a qué nos estamos refiriendo al utilizar el término "hayuco"?','un pequeño barco','un fruto','un tambor de madera de haya'])
-    find_answer(['estamos refiriendo utilizar término hayuco','un pequeño barco','un fruto','un tambor de madera de haya'])
-    find_answer(['¿queé campesina llevó al ejército francés a conseguir  varias victorias en el campo de batalla?','coco chanel','penélope glamour','juana de arco'])
-    find_answer(['¿en qué ciudad nació el pintor pablo picasso?','málaga','sevilla','barcelona'])
-    find_answer(['de los tres siguientes, uno no es un mago azul en la saga del señor de los anillos:','alatar','pallando','radagast'])
-    find_answer(['¿cual de estos tenistas consiguió ganar los cuatro torneos de grand slam en un mismo año?','bjorn borg','roger federer','rod laver'])
-    
-elif test_st == 4:
     find_answer(['¿queé campesina llevó al ejército francés a conseguir  varias victorias en el campo de batalla?','coco chanel','penélope glamour','juana de arco'])
     find_answer(['¿en qué ciudad nació el pintor pablo picasso?','málaga','sevilla','barcelona'])
     find_answer(['mide la cantidad de lluvia que cae en un lugar y en un espacio de tiempo determinados?','hidrógrafo','pluviómetro','termómetro'])
@@ -50,4 +40,8 @@ elif test_st == 4:
     find_answer(['de los tres siguientes, uno no es un mago azul en la saga del señor de los anillos:','alatar','pallando','radagast'])
     find_answer(['¿a cuál de estas novelas pertenece el personaje de la maga?','luces de bohemia','alicia en el país de las maravillas','rayuela'])
     find_answer(['¿cual de estos tenistas consiguió ganar los cuatro torneos de grand slam en un mismo año?','bjorn borg','roger federer','rod laver'])
+# elif test_set == 4:
+
+
+
 

@@ -12,10 +12,17 @@ from functools import wraps
 import errno
 import os
 import signal
+import ssl
+ssl.match_hostname = lambda cert, hostname: True
 
 #TODO: detect determinants and remove them instead than removing words with len <4 (both for questions and answers)
 #TODO: containerize code that procesesss the question / answers ^^ in a function
-
+#TODO: search numbers as words (cinco instead of 5)
+#TODO: parameterize everything so I can easily and automatically play with combination of values to optimize accuracy
+            #I'm talking about for exmaple; the number you multiply times the occurrency if the whole word appears in a search
+            #The number that you substract as a penalization of a word in an answer not occuring at all
+            #the number of webpages to find
+            #how exhaustive the removal of 'clutter' words from questions and anser is
 
 class TimeoutError(Exception):
     pass
@@ -76,32 +83,41 @@ def getFrequencies(url_and_answers):
         valid_words_in_answer1 = 0
         valid_words_in_answer2 = 0
         valid_words_in_answer3 = 0
-
         frequencies = [0,0,0]
         for word in words_answer1:
-            if(len(word)>4):
+            if(len(word)>3):
                 frequencies[0]+= text.count(word) 
+                #penalize that a word does'nt appear at all
+                if frequencies[0]== 0:
+                    valid_words_in_answer1+=3 #hacky penalization, you can do better
                 valid_words_in_answer1+=1
         for word in words_answer2:
-            if(len(word)>4):
+            if(len(word)>3):
                 frequencies[1]+=text.count(word)
                 valid_words_in_answer2+=1
+                #penalize that a word does'nt appear at all
+                if frequencies[1]== 0:
+                    valid_words_in_answer2+=3 #hacky penalization, you can do better
         for word in words_answer3:
-            if(len(word)>4):
+            if(len(word)>3):
                 frequencies[2]+=text.count(word)
                 valid_words_in_answer3+=1
+                #penalize that a word does'nt appear at all
+                if frequencies[2]== 0:
+                    valid_words_in_answer3+=3 #hacky penalization, you can do better
 
         #normalize
-        # print(frequencies)
-        frequencies[0]=frequencies[0] / (valid_words_in_answer1+1)
-        frequencies[1]=frequencies[1] / (valid_words_in_answer2+1)
-        frequencies[2]=frequencies[2] / (valid_words_in_answer3+1)
-        
+
+        frequencies[0]=max(frequencies[0],0) / (valid_words_in_answer1+1)
+        frequencies[1]=max(frequencies[1],0) / (valid_words_in_answer2+1)
+        frequencies[2]=max(frequencies[2],0) / (valid_words_in_answer3+1)
+
 
         #test full answers
         full_answer_frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
         #words that appear
-        full_answer_frequencies = list(map(lambda x: x*5, full_answer_frequencies))
+
+        full_answer_frequencies = list(map(lambda x: x*10, full_answer_frequencies))
 
         frequencies = [frequencies[0] + full_answer_frequencies[0],frequencies[1] + full_answer_frequencies[1],frequencies[2] + full_answer_frequencies[2]]
 
@@ -110,7 +126,6 @@ def getFrequencies(url_and_answers):
         return frequencies
     except TimeoutError:
         return [0,0,0]
-
 #peforms ocr on the image at path, searches the answer in google and
     #uses getFrequencies to find the most likely answer
 def find_answer(path):
@@ -143,10 +158,12 @@ def find_answer(path):
     new_question = ""
     for word in question_words:
         #remove ugly characters
-        word = word.replace("\"", "")
+        word = word.replace('"', "")
+        word = word.replace("“", "")
+        word = word.replace("”", "")
         word = word.replace("'", "")
         word = word.replace("?", "")
-        if len(word)>4:
+        if len(word)>2:
             new_question = new_question + " " + word
     question=new_question
 
