@@ -6,7 +6,7 @@ from multiprocessing import Pool, TimeoutError
 
 
 def process_image(image):
-    return pytesseract.image_to_string(image,lang="spa").lower()
+    return pytesseract.image_to_string(image,lang="spa")
 def get_question_answers(image):
     #open file and set init variables
     im = Image.open(image).convert('L')
