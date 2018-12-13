@@ -214,7 +214,7 @@ def find_answer(path):
     global last_first_answer
     number_of_workers = 10
     number_of_urls = 10
-    debug = False
+    debug = True
     global start_time
 
     #for debugging purposes, find_answer could be passed an array (question_answers)
