@@ -3,7 +3,6 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from multiprocessing import Pool, TimeoutError
 from image_process import get_question_answers
-from googlesearch import search 
 from pygoogling.googling import GoogleSearch
 from printer import print_scores
 import urllib
@@ -43,7 +42,6 @@ class Handler(FileSystemEventHandler):
             # Take any action here when a file is first created.
             print("Thinking...")
 
-            start_time = time.time()
             #check if image item was found
             if event.src_path.find(".crdownload")!= -1:
                 image_path = event.src_path[:-11]
@@ -52,7 +50,6 @@ class Handler(FileSystemEventHandler):
             elif event.src_path.find(".jpg")!= -1 or event.src_path.find(".png")!= -1:
                 find_answer(event.src_path)
 
-            print("--- Total time:  %s seconds ---" % (time.time() - start_time))
 
         elif event.event_type == 'modified':
             # Taken any action here when a file is modified.

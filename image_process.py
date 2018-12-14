@@ -12,7 +12,7 @@ def get_question_answers(image):
     im = Image.open(image).convert('L')
 
     #apply binary threshold
-    im = im.point(lambda x: 0 if x<128 else 255, '1')
+    im = im.point(lambda x: 0 if x<200 else 255, '1')
     image_size = im.size
     width = image_size[0]
     height = image_size[1]
@@ -56,5 +56,5 @@ def get_question_answers(image):
     pool.terminate()
     answer_questions[0]=answer_questions[0].replace("\n", " ")
     #process questions, all lowercase for example
-
+    print(answer_questions)
     return answer_questions
