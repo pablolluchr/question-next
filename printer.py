@@ -13,7 +13,7 @@ def print_scores(question_answers,scores):
     original_answer2 = answer2
     original_answer3 = answer3
     longest_answer = max(len(answer1), len(answer2), len(answer3))
-    notCertain = False
+    settings.isNotSure = False
 
     class bcolors:
         GREEN = '\033[92m'
@@ -35,17 +35,22 @@ def print_scores(question_answers,scores):
         if settings.printAnswers:
             print(question)
             print("")
-            print(bcolors.RED + "Those human bitches are smarter than me..." + bcolors.ENDC)
+            print(bcolors.RED + "Literally no occurrencies of the answers found..." + bcolors.ENDC)
             print("")
-
-        return
+        settings.isNotSure=True
+        return  
 
     percentage_scores = [round(100*scores[0]/sum_scores), round(100*scores[1]/sum_scores), round(100*scores[2]/sum_scores)]
+    
+    #detect fake negatives
+    
+
     if settings.isNegative:
+        #TODO: try to spot false negatives
         percentage_scores[0]=100-percentage_scores[0]
         percentage_scores[1]=100-percentage_scores[1]
         percentage_scores[2]=100-percentage_scores[2]
-    
+        
     if settings.printAnswers:
         print("")
         print("")
@@ -95,9 +100,9 @@ def print_scores(question_answers,scores):
     color = bcolors.RED
 
 
-    if percentage_scores[winner_index]-percentage_scores[loser1]>10 and percentage_scores[winner_index]-percentage_scores[loser2]>10:
+    if percentage_scores[winner_index]-percentage_scores[loser1]>5 and percentage_scores[winner_index]-percentage_scores[loser2]>5:
         color = bcolors.ORANGE
-    if percentage_scores[winner_index]-percentage_scores[loser1]>25 and percentage_scores[winner_index]-percentage_scores[loser2]>30:
+    if percentage_scores[winner_index]-percentage_scores[loser1]>25 and percentage_scores[winner_index]-percentage_scores[loser2]>25:
         color = bcolors.GREEN
     if settings.printAnswers:
         print("")

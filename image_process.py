@@ -1,7 +1,7 @@
 from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
 from multiprocessing import Pool, TimeoutError
-#TODO: SPLIT INTO PROCESSES TO PERFORM OCD IN EVERY IMAGE
+
 #returns an array: [question, answer1, answer2, answer3] given an input image
 
 
@@ -20,7 +20,7 @@ def get_question_answers(image):
     # img.crop( ( left, top, right, bottom ) )  # size: 45, 45
     # QUESTION
     top=3*height/4.6
-    bottom=3*height/3.9
+    bottom=3*height/3.95
     question = im.crop((1, top, width, bottom))
     question.save('question.png')
     # ANSWER 1
@@ -56,5 +56,4 @@ def get_question_answers(image):
     pool.terminate()
     answer_questions[0]=answer_questions[0].replace("\n", " ")
     #process questions, all lowercase for example
-    print(answer_questions)
     return answer_questions

@@ -7,7 +7,7 @@ from pygoogling.googling import GoogleSearch
 from printer import print_scores
 import urllib
 from bs4 import BeautifulSoup
-from main import find_answer
+from main import find_answer, find_answer_search_page
 
 
 class Watcher:
@@ -46,9 +46,9 @@ class Handler(FileSystemEventHandler):
             if event.src_path.find(".crdownload")!= -1:
                 image_path = event.src_path[:-11]
                 time.sleep(0.1) #TODO: CONSIDER TAKING THIS OUT AND CHECK IF IT STILL WORKS
-                find_answer(image_path)
+                find_answer_search_page(image_path)
             elif event.src_path.find(".jpg")!= -1 or event.src_path.find(".png")!= -1:
-                find_answer(event.src_path)
+                find_answer_search_page(event.src_path)
 
 
         elif event.event_type == 'modified':

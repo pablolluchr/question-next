@@ -3,7 +3,9 @@ import errno, os, signal, ssl, sys
 from functools import wraps
 from bs4 import BeautifulSoup
 ssl.match_hostname = lambda cert, hostname: True
-
+from requests import get
+import requests
+import argparse
 #returns a modified question in case it's a definition question
     #and sets the corresponding settings variables
 def isDefinitionFn(question):
@@ -109,3 +111,17 @@ def numberToText(number):
 def debug(text):
     if settings.debug:
         print(text)
+
+def getNumberOfResults(question_with_answer):
+    query = question_with_answer[0] + " " + question_with_answer[1]
+    url = "https://google.com/search?q="+query
+    raw = get(url)
+    soup = BeautifulSoup(raw.text,features="lxml")
+    results = soup.find('div',{'id':'resultStats'}).text
+    results = results.replace("About","")
+    results = results.replace(" ","")
+    results = results.replace(",","")
+    results = results.replace("results","")
+    results = int(results)
+
+    return results

@@ -9,8 +9,13 @@ from bs4 import BeautifulSoup
 from functools import wraps
 from printer import print_scores
 import settings
-from helpers import isDefinitionFn, isQuestionInPage, getTextFromHTML, processIndividualWord, numberToText, debug
-# ssl.match_hostname = lambda cert, hostname: True
+from helpers import isDefinitionFn, isQuestionInPage, getTextFromHTML, processIndividualWord, numberToText, debug, getNumberOfResults
+from requests import get
+import requests
+import argparse
+
+
+ssl.match_hostname = lambda cert, hostname: True
 
 class TimeoutError(Exception):
     pass
@@ -34,12 +39,14 @@ def timeout(seconds=2, error_message=os.strerror(errno.ETIME)):
     return decorator
 
 
-
+#OPTIMAL BEHAVIOUR: right now the optimal behaviour is calling find_answer_search_page first and then this function will call find_answer
+        #if it doesnt find a proper answer
+#TODO: make image_process scan the image to find where the text is instead of hard coding the positions of the image where each a
+        #answer is supposed to be. Sometimes the answers are two lines long and it fucks up the processing
 #TODO: MAKE ANSWERS RELATIVE =, i.e. weight answers based on how populare they are compared to a more
             #general query of the same topic
 #TODO: detect determinants and remove them instead than removing words with len <4 (both for questions and answers)
-#TODO: Preguntas fallidas: buscar pregunta + cada respuesta y ver si hay páginas donde se mencionan palabras ambas de la preguenta y de alguna de las repuestas
-#TODO: look for questions along with answers
+#TODO: Preguntas fallidas: buscar pregunta + cada respuesta y ver si hay páginas donde se mencionan palabras ambas de la preguenta y de alguna de las repuestas 
 #TODO: parameterize everything so I can easily and automatically play with combination of values to optimize accuracy
             #I'm talking about for exmaple; the number you multiply times the occurrency if the whole word appears in a search
             #The number that you substract as a penalization of a word in an answer not occuring at all
@@ -86,13 +93,12 @@ def getFrequencies(url_and_answers):
 
         processed_answer3 = processIndividualWord(text,words_answer3)
         frequencies[2]=processed_answer3[0]
-        valid_words_in_answer3 = processed_answer1[1]
+        valid_words_in_answer3 = processed_answer3[1]
     
         #normalize
         frequencies[0]=max(frequencies[0],0) / (valid_words_in_answer1+1)**2
         frequencies[1]=max(frequencies[1],0) / (valid_words_in_answer2+1)**2
         frequencies[2]=max(frequencies[2],0) / (valid_words_in_answer3+1)**2
-
 
         #---------------------test full answers-------------------------
         full_answer_frequencies = [text.count(answer1), text.count(answer2),text.count(answer3)]
@@ -130,6 +136,10 @@ def processQuestion(question):
         word = word.replace("'", "")
         word = word.replace("?", "")
         word = word.replace("¿", "")
+        word = word.replace("¿", "")
+        word = word.replace("!", "")
+        word = word.replace("¡", "")
+
 
         #detect if question is negative
         if word == "no" or word == "rechazó" or word == "rechazar":
@@ -138,19 +148,24 @@ def processQuestion(question):
                 settings.isNegative = True
         
         #remove meaningless words (dets, props...)
-        if len(word)>2:
+        if len(word)>1:
             new_question = new_question + " " + word
 
     #-----------------------Checks if it's a definition----------------------------
     new_question=isDefinitionFn(new_question)
+    
+    #quotes just mess up the searches so remove them
+
+    new_question=new_question.replace('"',"")
+    new_question=new_question.replace('“',"")
+    new_question=new_question.replace('”',"")
+    
     question = new_question
 
     return question
 
-#peforms ocr on the image at path, searches the answer in google and
-    #uses getFrequencies to find the most likely answer
-def find_answer(path):
-    settings.isNotSure = False
+#alternative method that counts the number of search results of a given answer
+def find_answer_count_results(path):
     settings.urls_searched = 0
    #---------------------OCR if path is image--------------------------
     if not isinstance(path, list):
@@ -180,10 +195,65 @@ def find_answer(path):
     question=processQuestion(question)
 
     #---------------------Search Google-----------------------------------
+
+    questions_with_answer = [[question,answer1],[question,answer2],[question,answer3]]
+    
+    #get frequencies using processes
+    pool = Pool(processes=settings.number_of_workers)
+    summed_frequencies = pool.map(getNumberOfResults, questions_with_answer)
+    pool.terminate()
+
+    #--------------------------------Print scores----------------------------
+    #success is either False or the winner
+    winner = print_scores([question_answers[0],answer1,answer2,answer3],summed_frequencies)
+    settings.numbers_tried = settings.numbers_tried + 1
+
+    #-----------------------------Search again or return----------------------------
+    # #if not sucessful search again but this time including the answers in the question and taking a bit more time
+    # if  settings.isNotSure and settings.numbers_tried<2:
+    #     time_out = settings.second_time_out
+    #     winner = find_answer([question_answers[0] + " " + answer1 + " " + answer2 + " " + answer3,answer1,answer2,answer3])
+       
+    # else:
+    debug("--- querrying time:  %s seconds ---" % (time.time() - settings.start_time))
+
+    return winner
+
+
+#peforms ocr on the image at path, searches the answer in google and
+    #uses getFrequencies to find the most likely answer
+def find_answer(path):
+    settings.isNotSure = False
+    settings.urls_searched = 0
+   #---------------------OCR if path is image--------------------------
+    if not isinstance(path, list):
+        question_answers = get_question_answers(path)
+    else:
+        question_answers=path
+
+    question = question_answers[0].lower()
+    answer1 = question_answers[1].lower()
+    answer2 = question_answers[2].lower()
+    answer3 = question_answers[3].lower()
+    
+    #--------------Set up variables when called for the first time for one question---------------
+    if settings.last_first_answer != answer1:
+        settings.isNegative = False
+        settings.isTermino = False
+        settings.numbers_tried=0
+        settings.start_time = time.time()
+        settings.last_first_answer=answer1
+        settings.time_out=settings.first_time_out
+
+   #---------------------Process question-----------------------------------
+    question=processQuestion(question)
+
+    #---------------------Search Google-----------------------------------
     google_search = GoogleSearch(question)
     google_search.start_search(max_page=settings.google_pages_loaded) # MAYBE 0 IS THE FIRST PAGE?
     urls = google_search.search_result 
-
+    if len(urls) == 0:
+        print("Either the question is corrupt or your IP address has been banned :(")
     #---------------------Find occurrences of answers in URL--------------------
     first_urls= urls[:settings.number_of_urls]
     urls_and_answers = []
@@ -204,16 +274,93 @@ def find_answer(path):
     debug(sumed_frequencies)
 
     #--------------------------------Print scores----------------------------
-    #success is either False or the winner
     winner = print_scores([question_answers[0],answer1,answer2,answer3],sumed_frequencies)
     settings.numbers_tried = settings.numbers_tried + 1
 
     #-----------------------------Search again or return----------------------------
     #if not sucessful search again but this time including the answers in the question and taking a bit more time
     if  settings.isNotSure and settings.numbers_tried<2:
+        debug("Searching with answers icluded")
         time_out = settings.second_time_out
+        print("Try going into URLs with answers included in the search")
         winner = find_answer([question_answers[0] + " " + answer1 + " " + answer2 + " " + answer3,answer1,answer2,answer3])
-       
+    else:
+        debug("--- querrying time:  %s seconds ---" % (time.time() - settings.start_time))
+
+    return winner
+
+#alternative method that doesn't go into pages but finds occurrencies of the answer in the search page
+def find_answer_search_page(path):
+    settings.isNotSure = False
+    settings.urls_searched = 0
+   #---------------------OCR if path is image--------------------------
+    if not isinstance(path, list):
+        question_answers = get_question_answers(path)
+    else:
+        question_answers=path
+
+    question = question_answers[0].lower()
+    answer1 = question_answers[1].lower()
+    answer2 = question_answers[2].lower()
+    answer3 = question_answers[3].lower()
+    
+    #--------------Set up variables when called for the first time for one question---------------
+    if settings.last_first_answer != answer1:
+        settings.isNegative = False
+        settings.isTermino = False
+        settings.numbers_tried=0
+        settings.start_time = time.time()
+        settings.last_first_answer=answer1
+        settings.time_out=2
+
+   #---------------------Process question-----------------------------------
+    question = processQuestion(question) #set variables
+    print(question)
+    #---------------------Search Google-----------------------------------
+    url = "https://www.google.com/search?newwindow=1&ei=e7EVXN2XJOiKlwTNl7fgAw&q="+ "+".join(question.split())
+    url_and_answers = [url,answer1,answer2,answer3]
+    html = get(url).text
+    # debug(html)
+    content = getTextFromHTML(html)
+ #--------------------test individual words in answer----------------------
+    words_answer1=answer1.split(' ')
+    words_answer2=answer2.split(' ')
+    words_answer3=answer3.split(' ')
+    frequencies = [0,0,0]
+
+    processed_answer1 = processIndividualWord(content,words_answer1)
+    frequencies[0]=processed_answer1[0]
+    valid_words_in_answer1 = processed_answer1[1]
+
+    processed_answer2 = processIndividualWord(content,words_answer2)
+    frequencies[1]=processed_answer2[0]
+    valid_words_in_answer2 = processed_answer2[1]
+
+    processed_answer3 = processIndividualWord(content,words_answer3)
+    frequencies[2]=processed_answer3[0]
+    valid_words_in_answer3 = processed_answer3[1]
+
+    #normalize
+    frequencies[0]=max(frequencies[0],0) / (valid_words_in_answer1+1)**2
+    frequencies[1]=max(frequencies[1],0) / (valid_words_in_answer2+1)**2
+    frequencies[2]=max(frequencies[2],0) / (valid_words_in_answer3+1)**2
+
+
+
+    #---------------------test full answers-------------------------
+    full_answer_frequencies = [content.count(answer1), content.count(answer2),content.count(answer3)]
+    full_answer_frequencies = list(map(lambda x: x*30, full_answer_frequencies))
+    frequencies = [frequencies[0] + full_answer_frequencies[0],frequencies[1] + full_answer_frequencies[1],frequencies[2] + full_answer_frequencies[2]]
+    # debug(frequencies)
+    
+    #--------------------------------Print scores----------------------------
+    #success is either False or the winner
+    winner = print_scores([question_answers[0],answer1,answer2,answer3],frequencies)
+    if settings.isNotSure:
+        time_out = settings.first_time_out
+        print("Try searching in URLs")
+        winner = find_answer([question_answers[0],answer1,answer2,answer3])
+        # winner = find_answer([question_answers[0] + " " + answer1 + " " + answer2 + " " + answer3,answer1,answer2,answer3])
     else:
         debug("--- querrying time:  %s seconds ---" % (time.time() - settings.start_time))
 

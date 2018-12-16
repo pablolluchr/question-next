@@ -1,4 +1,4 @@
-from main import find_answer
+from main import find_answer, find_answer_count_results, find_answer_search_page
 import sys, os
 import settings
 
@@ -13,27 +13,32 @@ global right_answers
 right_answers=0
 global total_questions
 total_questions = 0
+global printFailedQuestions
+printFailedQuestions=False
 
 def checkQuestion(questionAnswers,rightAnswer):
     rightAnswer=rightAnswer.lower()
     global total_questions
     global right_answers
-    answer = find_answer(questionAnswers)
+    global printFailedQuestions
+    answer = find_answer_search_page(questionAnswers)
     if not type(answer) is str:
         answer = "?"
     total_questions+=1
    
     if(answer == rightAnswer):
-        print( '\033[92m' +questionAnswers[0] + " --> " + answer + '\033[0m')
+        print( '\033[92m' + questionAnswers[0] + " --> " + answer + '\033[0m')
         right_answers+=1
     else:
-        failed_questions =open("failed_questions.txt", "a")
-        failed_questions.write("[['" + questionAnswers[0] + "','" + questionAnswers[1] + "','" + questionAnswers[2] + "','" + questionAnswers[3] + "'],'" + rightAnswer + "'],")
-        failed_questions.close()
+        if printFailedQuestions:
+            failed_questions =open("failed_questions.txt", "a")
+            failed_questions.write("[['" + questionAnswers[0] + "','" + questionAnswers[1] + "','" + questionAnswers[2] + "','" + questionAnswers[3] + "'],'" + rightAnswer + "'],")
+            failed_questions.close()
         
-        print( '\033[91m' +questionAnswers[0] + " --> " + answer + '\033[0m')
+        print( '\033[91m' +questionAnswers[0] + " --> " + answer + " [Right answer: " + rightAnswer + ']\033[0m')
 
 if action == "accuracy": #check accuracy over all tests in test_sets
+    #if you leave a blank line the tester will stop there
     try:
         failed_questions =open("failed_questions.txt", "a")
         settings.printAnswers=False
@@ -44,7 +49,7 @@ if action == "accuracy": #check accuracy over all tests in test_sets
             try:
                 print("Reading test_set_number: " + str(test_set_number) + "...")
                 if(len(test_set)<20):
-                    continue
+                    break
                 test_set=eval(test_set)
                 for test in test_set:
                     checkQuestion(test[0],test[1])
@@ -65,7 +70,7 @@ if action == "accuracy": #check accuracy over all tests in test_sets
 if action == "test": #test an individual set stored at test_sets
     try:
         test_set_number = 1
-        test_sets =open("test_sets.txt", "r")
+        test_sets =open("failed_questions.txt", "r")
         for test_set in test_sets:
             if(test_set_number != desired_test_set):
                 test_set_number+=1

@@ -1,196 +1,194 @@
 Pregunta 1
  
  
-¿Cuál es la primera letra del alfabeto griego?
+¿Cuál de estas películas NO ha sido dirigida por Pedro Almodóvar?
 
 
-Alfa
+Cincuenta sombras de Grey
 Correcta
-83.375
+67.857
 
-Beta
-437
+Todo sobre mi madre
+1.658
 
-Omega
-503
-Al acertar perteneces al 98,89% de jugadores iniciales que seguían en juego
+Los amantes pasajeros
+831
+Al fallar has quedado en el top 100,00% de jugadores iniciales
 Pregunta 2
  
  
-¿Cuál de estas obras literarias pertenece a William Shakespeare?
+En un plato de lacón con grelos, los grelos son:
 
 
-Romeo y Julieta
+Una fritura
+6.993
+
+Un aderezo
+11.084
+
+Una verdura
 Correcta
-80.147
-
-El alcalde de Zalamea
-840
-
-Cien años de soledad
-1.440
-Al fallar has quedado en el top 97,76% de jugadores iniciales
+48.189
+Al fallar has quedado en el top 94,20% de jugadores iniciales
 Pregunta 3
  
  
-¿Qué sabroso ingrediente echó el chef Jamie Oliver a una paella?
+¿Qué personaje de televisión lanzó a la fama a la actriz Miley Cyrus?
 
 
-Torrezno
-8.669
+Dora la exploradora
+252
 
-Anchoas
-17.188
-
-Chorizo
+Hannah Montana
 Correcta
-52.370
-Al fallar has quedado en el top 92,78% de jugadores iniciales
+48.055
+
+Buffy Cazavampiros
+401
+Al fallar has quedado en el top 69,24% de jugadores iniciales
 Pregunta 4
  
  
-¿Cuántas provincias tiene la comunidad autónoma de Andalucía?
+¿Cuál de estas ciudades es la capital de Suiza?
 
 
-7
-12.295
+Zurich
+10.298
 
-8
+Berna
 Correcta
-34.013
+27.376
 
-9
-7.036
-Al acertar perteneces al 40,34% de jugadores iniciales que seguían en juego
+Ginebra
+10.041
+Al fallar has quedado en el top 67,83% de jugadores iniciales
 Pregunta 5
  
  
-¿Cuál de estas culturas convivió en la España medieval junto con la cristiana y la musulmana?
+¿Qué nombre recibe la anomalía o defecto del ojo que produce una visión borrosa o poco clara de los objetos lejanos?
 
 
-Griega
-1.213
-
-Fenicia
-5.492
-
-Judía
+Miopía
 Correcta
-27.694
-Al fallar has quedado en el top 40,80% de jugadores iniciales
+20.719
+
+Hipermetropía
+4.442
+
+Presbicia
+1.669
+Al acertar perteneces al 29,45% de jugadores iniciales que seguían en juego
 Pregunta 6
 killer
  
  
-¿Cuál de estos deportes llegó a ser prohibido por el rey escocés Jacobo II?
+¿Qué comunidad autónoma fue la primera en ver aprobado su estatuto en el Congreso tras la Constitución de 1978?
 
 
-Rugby
-14.106
+Cataluña
+4.998
 
-Tenis
-7.497
+País Vasco
+6.409
 
-Golf
+Ambas
 Correcta
-5.842
-Al fallar has quedado en el top 32,55% de jugadores iniciales
+8.617
+Al fallar has quedado en el top 28,47% de jugadores iniciales
 Pregunta 7
-killer
  
  
-¿Quién es conocido como el padre del lenguaje de programación Java?
+¿De cuál de estos países es originario el árbol del café?
 
 
-James Gosling
+Kenia
+2.172
+
+Uganda
+1.687
+
+Etiopía
 Correcta
-2.655
-
-Tim Berners-Lee
-2.686
-
-Colin Javar
-1.701
-Al fallar has quedado en el top 8,35% de jugadores iniciales
+5.256
+Al acertar perteneces al 7,47% de jugadores iniciales que seguían en juego
 Pregunta 8
 killer
  
  
-¿Cuál de estas opciones NO corresponde al término “cinabrio”?
+¿Quién fue el primer científico que propuso el modelo heliocéntrico del sistema solar?
 
 
-Un tipo de polilla
-1.032
+Galileo Galilei
+1.603
 
-Un mineral
-716
-
-Un instrumento oriental de viento
+Aristarco de Samos
 Correcta
-989
-Al acertar perteneces al 1,17% de jugadores iniciales que seguían en juego
+1.038
+
+Nicolás Copérnico
+2.662
+Al fallar has quedado en el top 7,54% de jugadores iniciales
 Pregunta 9
- 
- 
-¿Qué nombre reciben los animales que desarrollan dos conjuntos de piezas dentales a lo largo de su vida?
-
-
-Lacteodontos
-210
-
-Difiodontos
-Correcta
-736
-
-Polifiodontos
-156
-Al fallar has quedado en el top 1,31% de jugadores iniciales
-Pregunta 10
 killer
  
  
-¿A qué nos estamos refiriendo cuando hacemos alusión al saín?
+¿Cuál es el origen del término italiano que utilizamos para referirnos a los fotógrafos de la crónica rosa?
 
 
-Un entremés teatral
-349
-
-El cojinete de una rueda
-196
-
-Un tipo de aceite
+Un personaje de película
 Correcta
-198
-Al fallar has quedado en el top 0,88% de jugadores iniciales
+414
+
+La primera revista del corazón
+453
+
+La fusión de dos insultos
+291
+Al fallar has quedado en el top 1,65% de jugadores iniciales
+Pregunta 10
+ 
+ 
+¿Cuál de estas películas NO fue dirigida por el cineasta David Lean?
+
+
+El puente sobre el río Kwai
+68
+
+Lawrence de Arabia
+112
+
+Doce del patíbulo
+Correcta
+272
+Al acertar perteneces al 0,39% de jugadores iniciales que seguían en juego
 Pregunta 11
  
  
-¿Cuál es el verdadero nombre del artista conocido internacionalmente como Bruno Mars?
+¿Cuál de estos clubes de fútbol ha sido más veces campeón de Europa?
 
 
-Bruno Sammartino
-13
+Chelsea
+55
 
-Peter Gene Hernández
+Borussia de Dortmund
+53
+
+Nottingham Forest
 Correcta
-158
-
-Richard Gálvez Gómez
-79
-Al fallar has quedado en el top 0,30% de jugadores iniciales
+172
+Al fallar has quedado en el top 0,40% de jugadores iniciales
 Pregunta 12
+killer
  
  
-¿Quién es el único actor que ha conseguido ganar un Oscar por un papel en alguna película dirigida por Tarantino?
+¿Cuál de estos famosos cantantes intentó entrar en la mansión de Elvis Presley con una pistola?
 
 
-Christoph Waltz
+Jerry Lee Lewis
 Correcta
-93
+57
 
-Samuel L. Jackson
-49
+Chuck Berry
+61
 
-Leonardo DiCaprio
-23
-Al acertar perteneces al 0,11% de jugadores iniciales que ganaron el juego
+Johnny Cash
