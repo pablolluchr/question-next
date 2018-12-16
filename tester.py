@@ -70,7 +70,7 @@ if action == "accuracy": #check accuracy over all tests in test_sets
 if action == "test": #test an individual set stored at test_sets
     try:
         test_set_number = 1
-        test_sets =open("failed_questions.txt", "r")
+        test_sets =open("test_sets.txt", "r")
         for test_set in test_sets:
             if(test_set_number != desired_test_set):
                 test_set_number+=1
