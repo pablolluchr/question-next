@@ -124,14 +124,19 @@ def getFrequencies(url_and_answers):
 #analyzes the question, sets the corresponding setting variables
     #and returns the processed question
 def processQuestion(question):
+    
     #-----------------------Init variables----------------------------
-    if settings.numbers_tried == 0:
-        settings.isNegative = False
     question_words = question.split(' ')
     new_question = ""
 
+    #CHECK IF IT'S NEGATIVE
+    potential_NO = list(filter(lambda x: x == "NO", question_words))
+    if(len(potential_NO)>=1):
+        settings.isNegative=True
+
     #------Go through words to remove clutter from question and determine what kind of q it is------------
     for word in question_words:
+        word = word.lower()
         #remove ugly characters
         word = word.replace("'", "")
         word = word.replace("?", "")
@@ -140,14 +145,9 @@ def processQuestion(question):
         word = word.replace("!", "")
         word = word.replace("¡", "")
 
-
-        #detect if question is negative
-        if word == "no" or word == "rechazó" or word == "rechazar":
+        if word == "no" and settings.isNegative:
             word = ""
-            if settings.numbers_tried ==0:
-                settings.isNegative = True
-        
-        #remove meaningless words (dets, props...)
+
         if len(word)>1:
             new_question = new_question + " " + word
 
@@ -243,7 +243,7 @@ def find_answer(path):
         settings.start_time = time.time()
         settings.last_first_answer=answer1
         settings.time_out=settings.first_time_out
-
+        
    #---------------------Process question-----------------------------------
     question=processQuestion(question)
 
@@ -298,8 +298,8 @@ def find_answer_search_page(path):
         question_answers = get_question_answers(path)
     else:
         question_answers=path
-
-    question = question_answers[0].lower()
+    
+    question = question_answers[0]
     answer1 = question_answers[1].lower()
     answer2 = question_answers[2].lower()
     answer3 = question_answers[3].lower()
@@ -312,6 +312,7 @@ def find_answer_search_page(path):
         settings.start_time = time.time()
         settings.last_first_answer=answer1
         settings.time_out=2
+    
 
    #---------------------Process question-----------------------------------
     question = processQuestion(question) #set variables

@@ -4,6 +4,7 @@ import settings
 #print scores to stdout according to likelyhood of an answer being the correct one
 #returns the most likely answer or False if it's not sure
 def print_scores(question_answers,scores):
+    
     question=question_answers[0]
     answer1=question_answers[1]
     answer2=question_answers[2]
@@ -46,6 +47,7 @@ def print_scores(question_answers,scores):
     
 
     if settings.isNegative:
+        print( "QUESTION IS NEGATVIee")
         #TODO: try to spot false negatives
         percentage_scores[0]=100-percentage_scores[0]
         percentage_scores[1]=100-percentage_scores[1]
