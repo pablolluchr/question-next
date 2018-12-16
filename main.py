@@ -219,7 +219,6 @@ def find_answer_count_results(path):
 
     return winner
 
-
 #peforms ocr on the image at path, searches the answer in google and
     #uses getFrequencies to find the most likely answer
 def find_answer(path):
@@ -290,6 +289,7 @@ def find_answer(path):
     return winner
 
 #alternative method that doesn't go into pages but finds occurrencies of the answer in the search page
+#calls find_answer if couldn't find an answer
 def find_answer_search_page(path):
     settings.isNotSure = False
     settings.urls_searched = 0
@@ -359,7 +359,7 @@ def find_answer_search_page(path):
     if settings.isNotSure:
         time_out = settings.first_time_out
         print("Try searching in URLs")
-        winner = find_answer([question_answers[0],answer1,answer2,answer3])
+        winner = find_answer(path)
         # winner = find_answer([question_answers[0] + " " + answer1 + " " + answer2 + " " + answer3,answer1,answer2,answer3])
     else:
         debug("--- querrying time:  %s seconds ---" % (time.time() - settings.start_time))
