@@ -5,3 +5,6 @@ Run [observer.py](https://github.com/pablolluchr/question-next/blob/master/obser
 Whenever a new image comes up, the most likely answer will be displayed on the console.
 
 ## Preview
+Example in which the application accurately predicted the right answer for the trivia question
+
+<img src="https://raw.githubusercontent.com/pablolluchr/question-next/master/preview.png"  width="400"/>
